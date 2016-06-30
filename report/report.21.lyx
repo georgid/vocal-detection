@@ -1,0 +1,824 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+% -----------------------------------------------
+% Template for ISMIR Papers
+% 2016 version, based on previous ISMIR templates
+
+% Requirements :
+% * 6+1 page length maximum
+% * 2MB maximum file size
+% * Copyright note must appear in the bottom left corner of first page
+% (see conference website for additional details)
+% -----------------------------------------------
+
+\usepackage{ismir}
+\usepackage{cite}
+
+% Title.
+% ------
+\title{Harmonic Modeling of Singing Voice for Source Separation}
+
+% Note: Please do NOT use \thanks or a \footnote in any of the author markup
+
+% Single address
+% To use with only one author or several with the same address
+% ---------------
+\oneauthor
+ {Georgi Dzhambazov}
+ {Music Technology Group, Universitat Pompeu Fabra, Barcelona, Spain}
+
+% Two addresses
+% --------------
+%\twoauthors
+%  {First author} {School \\ Department}
+%  {Second author} {Company \\ Address}
+
+%% To make customize author list in Creative Common license, uncomment and customize the next line
+%  \def\authorname{First Author, Second Author} 
+
+
+% Three addresses
+% --------------
+%\threeauthors
+% {First Author} {Affiliation1 \\ {\tt author1@ismir.edu}}
+% {Second Author} {\bf Retain these fake authors in\\\bf submission to preserve the formatting}
+%  {Third Author} {Affiliation3 \\ {\tt author3@ismir.edu}}
+
+%% To make customize author list in Creative Common license, uncomment and customize the next line
+%  \def\authorname{First Author, Second Author, Third Author} 
+
+% Four or more addresses
+% OR alternative format for large number of co-authors
+% ------------
+%\multauthor
+%{  \hspace{0.6cm}Georgi Dzhambazov\hspace{0.1cm} \\
+ % Music Technology Group, Universitat Pompeu Fabra, Barcelona, Spain\\
+%$^2$ International Laboratories, City, Country\\
+%$^3$  Company, Address\\
+%{\tt\small georgi.dzhambazov@upf.edu}}
+\def\authorname{Georgi Dzhambazov}
+
+
+\sloppy % please retain sloppy command for improved formatting
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+sloppy
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+maketitle
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+In this work we suggest how to adapt an approach, originally suggested for
+ modeling harmonic signals, to the task of singing voice separation.
+ The idea of harmonic modeling is ...
+ Since singing voice is highly harmonic we expect that a such a model is
+ an appropriate choice to capture the spectral content of the main singing
+ voice.
+ However, a pitfall are soloing instruments with harmonic nature.
+ 
+\end_layout
+
+\begin_layout Standard
+Recently there has been suggested a vocal detrection algorithm that decreases
+ false positives, caused by instruments that have spectral characteristics
+ similar to human voice [ref].
+\end_layout
+
+\begin_layout Standard
+We suggest to combine the harmonic modeling with a vocal/non-vocal discriminatio
+n step to select only segments, which have their origin in singing voice.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+in s.o.a.
+ of source separation distinction between vocal and non-vocal regions is
+ a problem? 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Approach
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/georgid/Documents/SVS.png
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Pitch detection
+\end_layout
+
+\begin_layout Standard
+The harmonic modeling requires as input the pitch series of the main source.
+ We rely on [ref] to extract the pitch for time intervals with predominant
+ melodic source (pitch contours).
+ The methodology computes for each contour how harmonically salient it,
+ based on the saliences of each pitch value.
+ Then contours from the main source are selected as having salience over
+ a threshold relative to the average mean salience of all contours.
+ We used the open-source implementation in essentia [ref], in which we have
+ set this voicing threshold=1.4, and guessUnvoiced=True which increased the
+ recall of the vocal regions 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+guesUnvoiced=True and voicing Tolerance.
+ (peakDistribThreshold not used) 
+\end_layout
+
+\end_inset
+
+.
+ A side effect of that is though, that some instrumental time intervals
+ increase the false positives rate.
+ 
+\end_layout
+
+\begin_layout Subsection
+Harmonic modeling
+\end_layout
+
+\begin_layout Standard
+The harmonic model of [ref] filters the spectral peaks corresponding to
+ the first 30 harmonic partials of the singing voice.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+formula
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Vocal detection
+\end_layout
+
+\begin_layout Standard
+To filter out the regions from background instruments, we have trained a
+ vocal classifier following the approach of [ref].
+ Like them we trained a random forest classifier (100 trees in scikit-learn)
+ but used only timbral features: 30 MFCCs and the variance of the first
+ 5 MFCCs (termed 'vocal variance').
+ The motivation is that timbral-based vocal classification complements the
+ vocal detection step of Melodia, relying only on pitch-contour salience.
+ Unlike [ref], we did not apply the vocal detector on the full recorded
+ mix, but instead on the extracted harmonic partials.
+ This is preferred because the latter ideally has its origin from one source.
+ A frame is classified as voiced/non-voiced based on majority voting of
+ the trees 
+\begin_inset Note Comment
+status open
+
+\begin_layout Plain Layout
+in doit() : if Parameters.WITH_VOCAL_DETECTION
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Training
+\end_layout
+
+\begin_layout Standard
+The classifier is trained on harmonic partials:
+\end_layout
+
+\begin_layout Standard
+-for each vocal segment or non-vocal segment from annotation features are
+ extracted as if it were standalone audio.
+ This assures that features with wide timespan (e.g.
+ vocal variance) are extracted without interference from adjacent regions.
+ 
+\begin_inset Note Comment
+status open
+
+\begin_layout Plain Layout
+train_main.get_class_frames
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+- the resynthesis is run on vocal track using reference MIDI and features
+ are extracted from it.
+ 
+\end_layout
+
+\begin_layout Subsection
+Resynthesis
+\end_layout
+
+\begin_layout Standard
+The vocal source is resynthesized by means of a constant overlapp add resynthesi
+s [ref]
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+formula
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The karaoke is derived by a simple spectral mask [ref].
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+These are results on 7 selected recordings from the iKala dataset.
+\end_layout
+
+\begin_layout Standard
+fixed: t = -70 dB, n_harm = 30, guessUnvoiced = True, voicingTolerance =
+ 1.4
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+_
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+_vv
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vv_mfcc
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+voicing_recall
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.834186015222
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.606637387512
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.46
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+voicing_f.a.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.353074759195
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.220322785193
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.132
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nsdr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.1693 0.7744
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sir
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8.1764 3.7464
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sar
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.5837 5.5095
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+--
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "../AlignmentDuration/ISMIR_noteOnsets/JabRefOnsetDetectionFullReferences,/Users/joro/Documents/Phd/UPF/papers/FMA2014_tex_fullPaper/JabRefCompMusicNon-Lyrics"
+options "default"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% For non bibtex users:
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+begin{thebibliography}{citations}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+bibitem {Author:00}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%E.
+ Author.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%``The Title of the Conference Paper,''
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%{
+\backslash
+it Proceedings of the International Symposium
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%on Music Information Retrieval}, pp.~000--111, 2000.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+bibitem{Someone:10}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%A.
+ Someone, B.
+ Someone, and C.
+ Someone.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%``The Title of the Journal Paper,''
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%{
+\backslash
+it Journal of New Music Research},
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%Vol.~A, No.~B, pp.~111--222, 2010.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+bibitem{Someone:04} X.
+ Someone and Y.
+ Someone.
+ {
+\backslash
+it Title of the Book},
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%    Editorial Acme, Porto, 2012.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+end{thebibliography}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

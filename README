@@ -1,0 +1,20 @@
+Contact: georgi.dzhambazov@upf.edu
+
+
+Requirements: 
+1. essentia (http://essentia.upf.edu/documentation/installing.html ) latest release version 2.1 beta2
+
+2. python scikit learn (http://scikit-learn.org/stable/install.html) latest stable.
+
+3. python mir_eval latest version: http://craffel.github.io/mir_eval/
+git clone https://github.com/craffel/mir_eval 
+cd  mir_eval
+python setup.py install
+=======
+
+cd <projectPath>/smstools/software/models/utilFunctions_C
+python compileModule.py  install
+
+
+python main.py <input_path/audio_name.wav> <output_path>
+will generate two files: <output_path>/audio_name_vocal.wav and <output_path>/audio_name_karaoke.wav
