@@ -1,0 +1,35 @@
+\begin{thebibliography}{1}
+
+\bibitem{durrieu2011musically}
+Jean-Louis Durrieu, Bertrand David, and Ga{\"e}l Richard.
+\newblock A musically motivated mid-level representation for pitch estimation
+  and musical audio source separation.
+\newblock {\em IEEE Journal of Selected Topics in Signal Processing},
+  5(6):1180--1191, 2011.
+
+\bibitem{lehner2015monaural}
+Bernhard Lehner and Gerhard Widmer.
+\newblock Monaural blind source separation in the context of vocal detection.
+\newblock In {\em pr{\'e}sent{\'e} {\`a} 16th International Society for Music
+  Information Retrieval Conference (ISMIR), At Malaga, Spain}, 2015.
+
+\bibitem{lehner2014reduction}
+Bernhard Lehner, Gerhard Widmer, and Reinhard Sonnleitner.
+\newblock On the reduction of false positives in singing voice detection.
+\newblock In {\em 2014 IEEE International Conference on Acoustics, Speech and
+  Signal Processing (ICASSP)}, pages 7480--7484. IEEE, 2014.
+
+\bibitem{salamon2012melody}
+Justin Salamon and Emilia G{\'o}mez.
+\newblock Melody extraction from polyphonic music signals using pitch contour
+  characteristics.
+\newblock {\em IEEE Transactions on Audio, Speech, and Language Processing},
+  20(6):1759--1770, 2012.
+
+\bibitem{Serra89asystem}
+Xavier Serra.
+\newblock A system for sound analysis/transformation/synthesis based on a
+  deterministic plus stochastic decomposition.
+\newblock Technical report, 1989.
+
+\end{thebibliography}

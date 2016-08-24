@@ -18,6 +18,8 @@ from numpy import math
 from matplotlib import pyplot
 
 
+
+
 def getTimeStamps(audioSamples,  feature_series):
     '''
     utility
@@ -61,7 +63,7 @@ def detect_vocal(audioSamples,  rfc, est_f0):
     
 #     vocal_var_array_T = features_array.T
 #     imshow(vocal_var_array_T, aspect = 'auto', interpolation='none') 
-    
+     
     # prepare array indices
     resFactor = Parameters.hSize/Parameters.hSizePitch 
     aLen = min([len(features_array)*resFactor, len(est_f0)])

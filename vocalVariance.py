@@ -12,7 +12,7 @@ import math
 import numpy as np
 from matplotlib.pyplot import imshow, show
 from Parameters import Parameters
-from cante.extrBarkBands import extrBarkBands
+# from cante.extrBarkBands import extrBarkBands
 
 def extract_features(audioChunkSamples):
     
@@ -22,8 +22,8 @@ def extract_features(audioChunkSamples):
     
             #### extract voicing features
     # 1. bark bands
-    bb = extrBarkBands(audioChunkSamples, Parameters.wSize, Parameters.hSize)
-    bb = essentia.array(bb)
+#     bb = extrBarkBands(audioChunkSamples, Parameters.wSize, Parameters.hSize)
+#     bb = essentia.array(bb)
     
     # and plot
 #         bb_T = bb.T
@@ -120,11 +120,11 @@ def extractVocalVar(mfccs_array, _frameSize ):
             mfcc_slice = mfccs_array [ startIdx : endIdx + 1, coeff ]
             vocal_var_array[i, coeff] = np.var( mfcc_slice )
        
-    # # transpose to have it in a better shape
-    # # we need to convert the list to an essentia.array first (== numpy.array of floats)
-    # vocal_var_T = essentia.array(vocal_var_array).T
-    # 
-    # # and plot
-    # imshow(vocal_var_T, aspect = 'auto', interpolation='none')  
+    # transpose to have it in a better shape
+    # we need to convert the list to an essentia.array first (== numpy.array of floats)
+    vocal_var_T = essentia.array(vocal_var_array).T
+     
+    # and plot
+    imshow(vocal_var_T, aspect = 'auto', interpolation='none')  
     
     return vocal_var_array

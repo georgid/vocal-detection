@@ -18,7 +18,7 @@ class Parameters(object):
     hSizePitch = 128
     hSize = wSize 
     
-    WITH_VOCAL_DETECTION = 0
+    WITH_VOCAL_DETECTION = 1
     visualize = 0
     
     nHarmonics = 30

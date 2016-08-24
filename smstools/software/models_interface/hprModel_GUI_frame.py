@@ -3,7 +3,7 @@
 from Tkinter import *
 import tkFileDialog, tkMessageBox
 import sys, os
-import pygame
+# import pygame
 from scipy.io.wavfile import read
 import hprModel_function
  
@@ -13,7 +13,7 @@ class HprModel_frame:
 		 
 		self.parent = parent        
 		self.initUI()
-		pygame.init()
+# 		pygame.init()
 
 	def initUI(self):
 
@@ -171,9 +171,9 @@ class HprModel_frame:
 			tkMessageBox.showerror("Stereo file", "Audio file must be Mono not Stereo")
 		elif fs != 44100:
 			tkMessageBox.showerror("Sample Frequency", "Sample frequency must be 44100 Hz")
-		else:
-			sound = pygame.mixer.Sound(filename)
-			sound.play()
+		else: pass
+# 			sound = pygame.mixer.Sound(filename)
+# 			sound.play()
  
 	def browse_file(self):
 		
@@ -206,8 +206,8 @@ class HprModel_frame:
 	def play_out_sound(self, extension):
 
 		filename = 'output_sounds/' + os.path.basename(self.filelocation.get())[:-4] + '_' + extension + '.wav'
-		if os.path.isfile(filename):
-			sound = pygame.mixer.Sound(filename)
-			sound.play()
+		if os.path.isfile(filename): pass
+# 			sound = pygame.mixer.Sound(filename)
+# 			sound.play()
 		else:
 			tkMessageBox.showerror("Output audio file not found", "The output audio file has not been computed yet")

@@ -24,18 +24,55 @@ from eval_svs import getWavFiles
 from smstools.software.models.hprModel import hprModel
 
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'smstools/software/models/'))
+                
 
 
 pathModel = os.path.join(os.path.dirname(os.path.realpath(__file__)), Parameters.model_name)
 
 
+def writeCsv(fileURI, list_, withListOfRows=1):
+    '''
+    TODO: move to utilsLyrics
+    '''
+    from csv import writer
+    fout = open(fileURI, 'wb')
+    w = writer(fout)
+    print 'writing to csv file {}...'.format(fileURI)
+    for row in list_:
+        if withListOfRows:
+            w.writerow(row)
+        else:
+            tuple_note = [row.onsetTime, row.noteDuration]
+            w.writerow(tuple_note)
+    
+    fout.close()
 
+def readCsv(onsets_URI):
+    from csv import reader
+    onsets_ts = [] 
+    with open(onsets_URI) as f:
+            r = reader(f)
+            for row in r:
+                currTs = float( "{0:.6f}".format(float(row[0].strip())) )
+#                 currDur = float( "{0:.2f}".format(float(row[1].strip())) )
+                currMIDI = float(row[1].strip())
+                onsets_ts.append((currTs, currMIDI))
+    
+    onsets_ts = numpy.array(onsets_ts)
+    return onsets_ts
 
 def doit(argv):
+    '''
+    Singing Voice Separation by Harmonic Modeling 
+    https://drive.google.com/drive/u/0/folders/0B4bIMgQlCAuqR1RidkNUUXotaGs
+    
+    '''
     
     if len(argv) != 3:
             print ("usage: {}  <pathToAudio> <pathToOutputFolder>".format(argv[0]) )
             sys.exit();
+     
+    recall = 0; false_alarm = 0
             
     # load pre-trained classifier 
     rfc = pickle.load(open(pathModel,'rb' ) )   
@@ -45,35 +82,43 @@ def doit(argv):
     _filename_base = os.path.basename(_filename)[:-4]
 #         fileWavURI = os.path.join(iKalaURI + '/Wavfile/mono/', _filename + '.wav')
 
-            
+    ##### 0.  stereo-to-mono        
     loader = essentia.standard.MonoLoader(filename= _filename    )
     audioSamples = loader()
     _filename = os.path.join(tempfile.mkdtemp() , _filename_base + '_mono.wav')
     monoWriter = essentia.standard.MonoWriter(filename=_filename)
     monoWriter(audioSamples)
     
-    
+    #### 0.5. extract f0
     timestamps, est_f0 = extractMelody(audioSamples, Parameters.wSize, Parameters.hSizePitch)
     est_freq_and_ts = zip(timestamps, est_f0)
     
+    ####### read instead from melodia
+    melodiaFileURI = os.path.join(output_path , _filename_base + '.melodia.csv')
+    est_freq_and_ts = readCsv(melodiaFileURI)
     
-    #### harmonic modeling + resynthesis
-    fileWavURI_resynth = os.path.join(tempfile.mkdtemp() , _filename_base + '_tmp.wav')
+        
+    
+#     outFileURI = os.path.join(output_path , _filename_base + '.pitch.csv')
+#     writeCsv(outFileURI, est_freq_and_ts)
+    
+    #### 1. harmonic modeling + resynthesis
     outVocalURI = os.path.join(output_path , _filename_base + '_voice.wav')
     outbackGrURI = os.path.join(output_path, _filename_base + '_instr.wav')
     
+    fileWavURI_resynth = os.path.join(tempfile.mkdtemp() , _filename_base + '_tmp.wav')
     if not os.path.isfile(fileWavURI_resynth):
         hfreq, hmag, hphase, fs, hopSizeMelodia, x, w, N = extractHarmSpec(_filename, est_freq_and_ts, nH=Parameters.nHarmonics)
-        # compensate for last missing, why missing? 
         
+        # compensate for last missing, why missing? 
         hfreq = np.vstack((hfreq,np.zeros(Parameters.nHarmonics)))
         hmag = np.vstack((hmag,np.zeros(Parameters.nHarmonics)))
-        hphase = np.vstack((hphase,np.zeros(Parameters.nHarmonics)))
-                  
+        hphase = np.vstack((hphase,np.zeros(Parameters.nHarmonics)))       
+              
         resynthesize(hfreq, hmag, hphase, fs, hopSizeMelodia, fileWavURI_resynth)
 
      
-    ###### detect vocal, extracting features from harmonic components
+    ###### 2. detect vocal, extracting features from harmonic components
     voiced  = est_f0
     if Parameters.WITH_VOCAL_DETECTION:
 
@@ -81,10 +126,8 @@ def doit(argv):
         audioSamples = loader()
         voiced, est_f0 = detect_vocal(audioSamples, rfc, est_f0)
     
-    recall, false_alarm = eval_one_file_voicing(audioSamples, _filename_base, est_f0, voiced)
-    print 'recall total: ' + str(recall)
-    print 'f. alarm total: ' + str(false_alarm)
-    show()
+#     recall, false_alarm = eval_one_file_voicing(audioSamples, _filename_base, est_f0, voiced)
+
     
     
 # #     # mark non-vocal segments as empty in harmonic spectrum
@@ -102,8 +145,9 @@ def doit(argv):
 #      
 #              
 #  
-#     # resynthesize again, with spectral masking
-#     yh, xr = hprModel_2(x, fs, w, N, Parameters.harmonicTreshold, Parameters.nHarmonics, hfreq, hmag, hphase, outVocalURI, outbackGrURI)
+
+#      3. resynthesize final result, with background masking
+    yh, xr = hprModel_2(x, fs, w, N, Parameters.harmonicTreshold, Parameters.nHarmonics, hfreq, hmag, hphase, outVocalURI, outbackGrURI)
     return recall, false_alarm
     
     
@@ -122,6 +166,9 @@ def eval_one_file_voicing(audioSamples, _filename_base, est_f0, voiced):
 
 #         
     recall, false_alarm  = eval_voicing(audioSamples, ref_MIDI, voiced)
+    print 'recall total: ' + str(recall)
+    print 'f. alarm total: ' + str(false_alarm)
+    
     return recall, false_alarm
     
 
@@ -153,12 +200,20 @@ def doit_all(iKalaTestURI, output_URI, filenames_selected=None):
 
 if __name__ == '__main__':
     
+#     doit(sys.argv)
+#     
+#     sys.exit()
+    audio_URI = '/Users/joro/Documents/Phd/UPF/voxforge/myScripts/vocal-detection/smstools/sounds/vignesh.wav'
+    audio_URI = '/Users/joro/Documents/Phd/UPF/voxforge/myScripts/vocal-detection/10161_chorus.wav'
+    output_URI = '/Users/joro/Documents/Phd/UPF/voxforge/myScripts/vocal-detection/'
     
+    doit(['dummy,', audio_URI, output_URI])
+  
+  #############################################################   doit all
     _filenames_selected = ['45416_verse.wav', '45412_chorus.wav', '54247_verse.wav', '10161_chorus.wav', '10161_verse.wav', '10170_chorus.wav',  '31113_chorus.wav',   '45412_verse.wav']
 
     _filenames_selected = ['54247_verse.wav',  '10170_chorus.wav']
 
-#     doit(sys.argv)
     output_URI = '/Wavfile_resynth_norm'
     doit_all(Parameters.iKalaURI, output_URI, _filenames_selected)
     

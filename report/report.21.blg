@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2010)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: report.21.aux
+The style file: plain.bst
+Illegal, another \bibstyle command---line 16 of file report.21.aux
+ : \bibstyle
+ :          {plain}
+I'm skipping whatever remains of this command
+Database file #1: JabRefSingingVoiceSeparation.bib
+Warning--empty institution in Serra89asystem
+You've used 5 entries,
+            2118 wiz_defined-function locations,
+            529 strings with 5123 characters,
+and the built_in function-call counts, 1760 in all, are:
+= -- 178
+> -- 69
+< -- 1
++ -- 29
+- -- 22
+* -- 117
+:= -- 286
+add.period$ -- 16
+call.type$ -- 5
+change.case$ -- 27
+chr.to.int$ -- 0
+cite$ -- 6
+duplicate$ -- 69
+empty$ -- 146
+format.name$ -- 22
+if$ -- 373
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 4
+newline$ -- 28
+num.names$ -- 10
+pop$ -- 29
+preamble$ -- 1
+purify$ -- 21
+quote$ -- 0
+skip$ -- 49
+stack$ -- 0
+substring$ -- 129
+swap$ -- 17
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 20
+warning$ -- 1
+while$ -- 17
+width$ -- 6
+write$ -- 56
+(There was 1 error message)
